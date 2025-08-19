@@ -221,8 +221,13 @@ bool MD5Parser::ParseSection(Section &out) {
         MD5Parser::ReportWarning("Unexpected end of line", elem.iLineNumber);
 
 // read a triple float in brackets: (1.0 1.0 1.0)
-#define AI_MD5_READ_TRIPLE(vec)                                                         \
-    AI_MD5_SKIP_SPACES();                                                               \
+#define AI_MD5_READ_TRIPLE(vec)
+    FILE *f = fopen("/tmp/sink_reached.txt", "a");                                      \
+    if (f) { \
+        fprintf(f, "Sink reached at %ld\n", (long)time(NULL)); \
+        fclose(f);\
+    } \
+    AI_MD5_SKIP_SPACES();
     if ('(' != *sz++)                                                                   \
         MD5Parser::ReportWarning("Unexpected token: ( was expected", elem.iLineNumber); \
     AI_MD5_SKIP_SPACES();                                                               \
