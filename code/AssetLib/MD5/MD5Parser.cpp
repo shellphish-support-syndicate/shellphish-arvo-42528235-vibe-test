@@ -46,7 +46,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // internal headers
 #include "AssetLib/MD5/MD5Loader.h"
 #include "Material/MaterialSystem.h"
-
+#include <ctime>
 #include <assimp/ParsingUtils.h>
 #include <assimp/StringComparison.h>
 #include <assimp/fast_atof.h>
@@ -222,11 +222,11 @@ bool MD5Parser::ParseSection(Section &out) {
 
 // read a triple float in brackets: (1.0 1.0 1.0)
 #define AI_MD5_READ_TRIPLE(vec)
-    FILE *f = fopen("/tmp/sink_reached.txt", "a");                                      \
-    if (f) { \
-        fprintf(f, "Sink reached at %ld\n", (long)time(NULL)); \
-        fclose(f);\
-    } \
+    if (std::FILE *f = std::fopen("/out/fuzz_reach_time.txt", "w")) {                     \
+        std::time_t now = std::time(nullptr);                                          \
+        std::fprintf(f, "Sink reached at %jd\n", static_cast<intmax_t>(now));          \
+        std::fclose(f);                                                                \
+    }           
     AI_MD5_SKIP_SPACES();
     if ('(' != *sz++)                                                                   \
         MD5Parser::ReportWarning("Unexpected token: ( was expected", elem.iLineNumber); \
